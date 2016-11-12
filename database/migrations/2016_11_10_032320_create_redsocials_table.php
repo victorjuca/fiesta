@@ -16,7 +16,7 @@ class CreateRedsocialsTable extends Migration {
 		{
 			$table->increments('id');
 			$table->string('nombre');
-			$table->string('imagen');
+			$table->string('imagen')->nullable();
 
 		});
 	}

@@ -18,7 +18,7 @@ class CreateEmpresasTable extends Migration {
 			$table->timestamps();
 			$table->string('nombre');
 			$table->string('descripcion');
-			$table->string('imagen_principal');
+			$table->string('imagen_principal')->nullable();
 			$table->integer('contacto_id');
 			$table->integer('categoria_id');
 			$table->boolean('activa');

@@ -19,3 +19,9 @@ Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
 ]);
+
+Route::resource('categoria', 'CategoriaController');
+Route::get('showAllPrincipal', 'CategoriaController@showPrincipal');
+Route::get('showAllSubCategoria/{catalogo_id}', 'CategoriaController@showSubCategoria');
+
+Route::resource('empresa', 'EmpresaController');

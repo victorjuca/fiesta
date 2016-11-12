@@ -17,6 +17,7 @@ class CreateEmpresaRedsocialsTable extends Migration {
 			$table->increments('id');
 			$table->integer('empresa_id');
 			$table->integer('redsocial_id');
+			$table->string();
 			$table->foreign('empresa_id')
       ->references('id')->on('empresas');
       		$table->foreign('redsocial_id')
