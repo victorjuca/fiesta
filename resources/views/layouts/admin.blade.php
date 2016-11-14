@@ -10,11 +10,14 @@
         {!!Html::style('admin/assets/css/font-awesome.css')!!}
         <!-- CUSTOM STYLES-->
         {!!Html::style('admin/assets/css/custom.css')!!}
-
+        {!!Html::style('alertify/themes/alertify.core.css')!!}
+        {!!Html::style('alertify/themes/alertify.default.css')!!}
         <!-- GOOGLE FONTS-->
         <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
     </head>
     <body>
+        
+<input type="hidden" name="_token" value="{{csrf_token()}}" id="token" ng-model="token"/>
 
         <div id="wrapper">
             <div class="navbar navbar-inverse navbar-fixed-top">
@@ -65,7 +68,7 @@
         {!!Html::script('admin/assets/js/bootstrap.min.js')!!}
         <!-- CUSTOM SCRIPTS -->
         {!!Html::script('admin/assets/js/custom.js')!!}
-
+        {!!Html::script('alertify/lib/alertify.js')!!} 
 
     </body>
 </html>

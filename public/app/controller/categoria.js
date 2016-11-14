@@ -1,72 +1,134 @@
 var app = angular.module('categoriaModule', []);
-app.config(function($interpolateProvider) {
-	$interpolateProvider.startSymbol('%%');
-	$interpolateProvider.endSymbol('%%');
+app.config(function ($interpolateProvider) {
+    $interpolateProvider.startSymbol('%%');
+    $interpolateProvider.endSymbol('%%');
 });
-app.controller('categoriaAdmonController', ['$scope', '$http', function($scope, $http) {
+app.controller('categoriaAdmonController', ['$scope', '$http', function ($scope, $http) {
+        showAllPrincipal($scope, $http);
 
-	showAllPrincipal($scope, $http);
-	$scope.guardaCategoria = function() {
-		if (!valida($scope)) {
-			return;
-		}
+        console.log(token);
 
-			$http({
-				method: 'post',
-				url: '/categoria',
-				data: $.param($scope.evento),
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded',
-					'X-CSRF-TOKEN': $scope.token
-				}
-			}).success(function(response) {
-				mensaje = 'Se guardo correctamente.';
-				defineMensajeEvento(mensaje, true, $scope);
-				$scope.evento = '';
-				cargaEventos($scope, $http);
-			}).error(function(response) {
-				mensaje = "Ocurrio un error al tratar de guardar.";
-				defineMensajeEvento(mensaje, false, $scope);
-			});
-
-	}
-
-	$scope.showAllSubCategoria = function(categoria_id) {
-
-			$http({
-				method: 'get',
-				url: '/showAllSubCategoria/' + categoria_id,
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded'
-				}
-			}).success(function(response) {
-				$scope.lsubcategoria = response;
-			}).error(function(response) {
-				mensaje = 'Ocurrió un error al tratar de cargar las categorias.';
-				alertify.error(mensaje);			
-			});
-	}
-
-	$scope.showAllPrincipal = function() {
+        var opc;
 
 
-	}	
+        $scope.lanzamodal = function (opcx, cat) {
+            $('#modalCrud').modal('show');
+            opc = opcx;
+            $scope.categoria = cat;    
+        };
 
-}]);
 
-function showAllPrincipal(scope, http){
-			http({
-				method: 'get',
-				url: '/showAllPrincipal',
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded'
-				}
-			}).success(function(response) {
-				scope.lcategoriap = response;
-			}).error(function(response) {
-				mensaje = 'Ocurrió un error al tratar de cargar las categorias';
-				alertify.error(mensaje);			
-			});	
+        $scope.crudCategoria = function () {
+
+            if (!valida($scope)) {
+                return;
+            }
+            var token = document.getElementById("token").value;
+
+            if (opc === 1) {
+                $scope.categoria.categoria_id = 1;
+
+                $http({
+                    method: 'post',
+                    url: '/categoria',
+                    data: $.param($scope.categoria),
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRF-TOKEN': document.getElementById("token").value
+                    }
+                }).success(function (response) {
+
+					if(response.estado === 0){
+ 						alertify.success(response.mensaje);	
+ 						showAllPrincipal($scope, $http);
+	 					$scope.categoria = null;
+	 					$('#modalCrud').modal('hide');
+					}else{
+						  alertify.error(response.mensaje);
+					}
+
+
+                }).error(function (response) {
+                    mensaje = "Ocurrio un error al tratar de guardar.";
+                     alertify.error(mensaje);
+                });
+            }else{
+                $http({
+                    method: 'put',
+                    url: '/categoria/'+ $scope.categoria.id,
+                    data: $.param($scope.categoria),
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRF-TOKEN': document.getElementById("token").value
+                    }
+                }).success(function (response) {
+
+                	console.log(response);
+
+					if(response.estado === 0){
+ 						alertify.success(response.mensaje);	
+ 						showAllPrincipal($scope, $http);
+	 					$scope.categoria = null;
+	 					$('#modalCrud').modal('hide');
+					}else{
+						  alertify.error(response.mensaje);
+					}
+                }).error(function (response) {
+                    mensaje = "Ocurrio un error al tratar de actualizar.";
+                     alertify.error(mensaje);
+                });            	
+            }
+
+
+        };
+
+
+$scope.eliminaCategoria = function(categoria_id) {
+
+		alertify.confirm("¿Deseas eliminar la categoria?", function(e) {
+			if (e) {
+				$http({
+					method: 'DELETE',
+					url: '/categoria/' + categoria_id,
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded',
+						'X-CSRF-TOKEN': document.getElementById("token").value
+					}
+				}).success(function(response) {
+
+					console.log(response);
+					if(response.estado === 0){
+ 						alertify.success(response.mensaje);	
+ 						showAllPrincipal($scope, $http);
+	 					$scope.categoria = null;
+					}else{
+						  alertify.error(response.mensaje);
+					}
+
+				}).error(function(response) {
+					mensaje = 'Ocurrio un error al eliminar.';
+					alertify.error(mensaje);
+				});
+			}
+		});
+
+    };
+
+    }]);
+
+function showAllPrincipal(scope, http) {
+    http({
+        method: 'get',
+        url: '/showAllPrincipal',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+    }).success(function (response) {
+        scope.lcategoriap = response;
+    }).error(function (response) {
+        mensaje = 'Ocurrió un error al tratar de cargar las categorias';
+        alertify.error(mensaje);
+    });
 }
 
 
@@ -74,22 +136,20 @@ function showAllPrincipal(scope, http){
 
 
 function valida(scope) {
-	scope.estado = 'Error';
-	scope.estilo = 'alert alert-danger fade in';
-	scope.showmensaje = true;
 
-	var nombre = document.getElementById("nombre").value;
+    var nombre = document.getElementById("nombre").value;
 
-	if (!validaVacion(clave)) {
-		nombreCampo = 'Nombre';
-		scope.mensajes = 'El campo ' + nombreCampo + ', es necesario';
-		return false;
-	}
+    if (!validaVacion(nombre)) {
+        alertify.error('El nombde se encuentra vacio.');
+        return false;
+    }
+
+    return true;
 }
 
 function validaVacion(valor) {
-	if (valor == '' || typeof valor == "undefined") {
-		return false;
-	}
-	return true;
+    if (valor == '' || typeof valor == "undefined") {
+        return false;
+    }
+    return true;
 }

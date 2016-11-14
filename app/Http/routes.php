@@ -23,5 +23,6 @@ Route::controllers([
 Route::resource('categoria', 'CategoriaController');
 Route::get('showAllPrincipal', 'CategoriaController@showPrincipal');
 Route::get('showAllSubCategoria/{catalogo_id}', 'CategoriaController@showSubCategoria');
+Route::get('subcategoria', 'CategoriaController@viewSubCategoria');
 
 Route::resource('empresa', 'EmpresaController');
