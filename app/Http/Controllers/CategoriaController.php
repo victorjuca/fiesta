@@ -66,9 +66,10 @@ class CategoriaController extends Controller {
 
 			$fileImagen = $request->file('imagen');
 			$nombreImagen = Carbon::now()->second.$fileImagen->getClientOriginalName();
-			//indicamos que queremos guardar un nuevo archivo en el disco local
        		\Storage::disk('local')->put($nombreImagen,  \File::get($fileImagen));
        		$categoria->imagen = $nombreImagen;
+
+
 			$categoria->save();
         }
 
@@ -152,6 +153,7 @@ class CategoriaController extends Controller {
 
 			$categoria = categoria::find($id);
 			$categoria->nombre = $request->input('nombre');
+
 			$categoria->save();
         }
 
