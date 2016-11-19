@@ -17,6 +17,7 @@ class CreateCategoriasTable extends Migration {
 			$table->increments('id');
 			$table->timestamps();
 			$table->string('nombre');
+			$table->string('imagen')->nullable();
 			$table->integer('categoria_id');
 			$table->foreign('categoria_id')
       ->references('id')->on('categorias');

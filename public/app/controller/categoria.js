@@ -3,6 +3,21 @@ app.config(function ($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');
 });
+app.directive('fileModel', ['$parse', function ($parse) {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            var model = $parse(attrs.fileModel);
+            var modelSetter = model.assign;
+ 
+            element.bind('change', function(){
+                scope.$apply(function(){
+                    modelSetter(scope, element[0].files[0]);
+                });
+            });
+        }
+    };
+}]);
 app.controller('categoriaAdmonController', ['$scope', '$http', function ($scope, $http) {
         showAllPrincipal($scope, $http);
 
@@ -25,13 +40,18 @@ app.controller('categoriaAdmonController', ['$scope', '$http', function ($scope,
             }
             var token = document.getElementById("token").value;
 
+            var file = $scope.imagen;
+            var fd = new FormData();
+            fd.append('file', file);
+            $scope.categoria.imagen = fd;
             if (opc === 1) {
                 $scope.categoria.categoria_id = 1;
 
                 $http({
                     method: 'post',
                     url: '/categoria',
-                    data: $.param($scope.categoria),
+                    data: {myObj: $scope.categoria},
+                    file: file,
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
                         'X-CSRF-TOKEN': document.getElementById("token").value

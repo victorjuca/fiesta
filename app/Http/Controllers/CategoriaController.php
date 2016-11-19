@@ -48,8 +48,9 @@ class CategoriaController extends Controller {
 
 		$categoria = new categoria();
 
-		$categoria->nombre = $request->input('nombre');
+		$categoria->nombre = $request->input('body.nombre');
 		$categoria->categoria_id = $request->input('categoria_id');
+		$categoria->imagen = $request->input('imagen');
 
 		$lcategoria = DB::table('categorias')
 							->where('categoria_id', '=', $categoria->categoria_id)

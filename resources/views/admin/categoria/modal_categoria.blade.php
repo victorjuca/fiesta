@@ -12,6 +12,10 @@
                         <label>Nombre</label>
                         <input id="nombre" class="form-control" ng-model="categoria.nombre"/>
                     </div>
+                    <data></data>
+<label class="btn btn-default btn-file">
+    <input type="file" file-model="imagen">
+</label>
                     <button type="button" class="btn btn-success btn-block" ng-click='crudCategoria()'>Guardar</button>
                 </form>
             </div>
