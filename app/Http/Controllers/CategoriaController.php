@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\categoria;
 use DB;
-
+use Carbon\Carbon;
 class CategoriaController extends Controller {
 
 
@@ -48,7 +48,7 @@ class CategoriaController extends Controller {
 
 		$categoria = new categoria();
 
-		$categoria->nombre = $request->input('body.nombre');
+		$categoria->nombre = $request->input('nombre');
 		$categoria->categoria_id = $request->input('categoria_id');
 		$categoria->imagen = $request->input('imagen');
 
@@ -63,6 +63,12 @@ class CategoriaController extends Controller {
         }else{
 			$estado = 0;
 			$mensaje = "Se guardo correctamente la Categoría.";
+
+			$fileImagen = $request->file('imagen');
+			$nombreImagen = Carbon::now()->second.$fileImagen->getClientOriginalName();
+			//indicamos que queremos guardar un nuevo archivo en el disco local
+       		\Storage::disk('local')->put($nombreImagen,  \File::get($fileImagen));
+       		$categoria->imagen = $nombreImagen;
 			$categoria->save();
         }
 

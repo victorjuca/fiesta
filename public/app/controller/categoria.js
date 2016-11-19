@@ -42,20 +42,21 @@ app.controller('categoriaAdmonController', ['$scope', '$http', function ($scope,
 
             var file = $scope.imagen;
             var fd = new FormData();
-            fd.append('file', file);
-            $scope.categoria.imagen = fd;
+            fd.append('imagen', file);
+            fd.append('nombre', $scope.categoria.nombre);
+            fd.append('categoria_id', 1);
+
             if (opc === 1) {
-                $scope.categoria.categoria_id = 1;
+               // $scope.categoria.categoria_id = 1;
 
                 $http({
                     method: 'post',
                     url: '/categoria',
-                    data: {myObj: $scope.categoria},
-                    file: file,
+                    data: fd,
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
+                        "Content-type": undefined,
                         'X-CSRF-TOKEN': document.getElementById("token").value
-                    }
+                    },transformRequest: angular.identity
                 }).success(function (response) {
 
 					if(response.estado === 0){
