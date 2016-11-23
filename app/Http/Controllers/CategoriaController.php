@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\categoria;
 use DB;
 use Carbon\Carbon;
+use App\Http\Controllers\Storage;
 class CategoriaController extends Controller {
 
 
@@ -165,6 +166,38 @@ class CategoriaController extends Controller {
 		return $res;
 	}
 
+	public function updateImagen(Request $request){
+
+		$categoria = categoria::find($request->input('categoriaid'));
+		$estado = 0;
+		$mensaje = "";
+
+		if(empty($categoria)){
+
+			$estado = 0;
+			$mensaje = "La imagen se encuentra vacia.";				
+
+		}else{
+
+			$estado = 0;
+			$mensaje = "Se actualizo correcamente la imagen.";			
+
+			\Storage::Delete($categoria->imagen);
+			$fileImagen = $request->file('imagen');
+			$nombreImagen = Carbon::now()->second.$fileImagen->getClientOriginalName();
+	       	\Storage::disk('local')->put($nombreImagen,  \File::get($fileImagen));
+	       	$categoria->imagen = $nombreImagen;	
+	       	$categoria->save();	
+		}
+
+		$res = $array = [
+	    "estado" => $estado,
+	    "mensaje" => $mensaje
+		];  
+
+		return $res;   
+	}	
+
 	/**
 	 * Remove the specified resource from storage.
 	 *
@@ -190,6 +223,7 @@ class CategoriaController extends Controller {
         }else{
 
         	$categoria = categoria::find($id);
+        	\Storage::Delete($categoria->imagen);
 			$estado = 0;
 			$mensaje = "Se elimino correctamente la Categoría.";
 			$categoria->delete();

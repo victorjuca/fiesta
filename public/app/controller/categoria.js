@@ -32,6 +32,53 @@ app.controller('categoriaAdmonController', ['$scope', '$http', function ($scope,
             $scope.categoria = cat;    
         };
 
+        var categoriaid ;
+        $scope.lanzamodalimagen = function (catid) {
+            $('#modalActualizaImagen').modal('show');
+            categoriaid = catid;
+        };
+
+        $scope.actualizaImagen = function(){
+
+                if(!$scope.categoria){
+                    alertify.error('Debe seleccionar una imagen.');
+                    return false;
+                }                
+            var imagen = $scope.categoria.imagen;
+
+            console.log(imagen);
+            var fd = new FormData();
+            fd.append('imagen', imagen);
+            fd.append('categoriaid', categoriaid);
+
+
+
+                $http({
+                    method: 'post',
+                    url: '/updateimagencategoria',
+                    data: fd,
+                    headers: {
+                        "Content-type": undefined,
+                        'X-CSRF-TOKEN': document.getElementById("token").value
+                    },transformRequest: angular.identity
+                }).success(function (response) {
+
+                    if(response.estado === 0){
+                        alertify.success(response.mensaje); 
+                        showAllPrincipal($scope, $http);
+                        $scope.categoria = null;
+                        $('#modalActualizaImagen').modal('hide');
+                    }else{
+                          alertify.error(response.mensaje);
+                    }
+
+
+                }).error(function (response) {
+                    mensaje = "Ocurrio un error al tratar de guardar.";
+                     alertify.error(mensaje);
+                });
+        }
+
 
         $scope.crudCategoria = function () {
 
@@ -40,9 +87,10 @@ app.controller('categoriaAdmonController', ['$scope', '$http', function ($scope,
             }
             var token = document.getElementById("token").value;
 
-            var file = $scope.imagen;
+            var imagen = $scope.categoria.imagen;
+            console.log(imagen);
             var fd = new FormData();
-            fd.append('imagen', file);
+            fd.append('imagen', imagen);
             fd.append('nombre', $scope.categoria.nombre);
             fd.append('categoria_id', 1);
 
@@ -158,10 +206,17 @@ function showAllPrincipal(scope, http) {
 
 function valida(scope) {
 
+
+
     var nombre = document.getElementById("nombre").value;
 
     if (!validaVacion(nombre)) {
-        alertify.error('El nombde se encuentra vacio.');
+        alertify.error('El nombre se encuentra vacio.');
+        return false;
+    }
+
+    if(!scope.categoria.imagen){
+        alertify.error('Debe seleccionar una imagen.');
         return false;
     }
 

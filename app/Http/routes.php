@@ -24,5 +24,5 @@ Route::resource('categoria', 'CategoriaController');
 Route::get('showAllPrincipal', 'CategoriaController@showPrincipal');
 Route::get('showAllSubCategoria/{catalogo_id}', 'CategoriaController@showSubCategoria');
 Route::get('subcategoria', 'CategoriaController@viewSubCategoria');
-
+Route::post('updateimagencategoria', 'CategoriaController@updateImagen');
 Route::resource('empresa', 'EmpresaController');
