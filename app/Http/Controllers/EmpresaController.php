@@ -2,8 +2,11 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
+use App\empresa;
+use App\estado;
+use App\municipio;
 use Illuminate\Http\Request;
+use DB;
 
 class EmpresaController extends Controller {
 
@@ -32,9 +35,20 @@ class EmpresaController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store()
+	public function store(Request $request)
 	{
 		//
+	}
+
+	public function allEstado(){
+		$lempresa = estado::all();
+		return $lempresa;
+	}
+	public function getMunicipio($id){
+
+		$lmunicipio = DB::select('select * from municipios where estado_id = :id', ['id' => $id]);
+		
+		return $lmunicipio;
 	}
 
 	/**

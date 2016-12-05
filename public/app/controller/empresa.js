@@ -19,22 +19,59 @@ app.directive('fileModel', ['$parse', function($parse) {
 	};
 }]);
 
+var imagen;
 
 app.controller('empresaAdmonController', ['$scope', '$http', function($scope, $http) {
 
+	cargaEstado($scope, $http);
+
+	$scope.cargaMunicipio = function(id) {
+		cargaMunicipio($scope, $http,id);
+	}
+
+
+	
 	$scope.lanzamodal = function() {
 		$('#modalImagen').modal('show');
 	};
-        $scope.guardaEmpresa = function () {
 
-        	console.log($scope.empresa);
-        	console.log(angular.element(document.querySelector('.cropped')) );
+    $scope.guardaEmpresa = function () {
 
-        };
+        console.log(imagen);
 
+    };
 
 }]);
 
+function cargaEstado(scope, http){
+    http({
+        method: 'get',
+        url: '/getAllEstados',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+    }).success(function (response) {
+        scope.lestado = response;
+    }).error(function (response) {
+        mensaje = 'Ocurrió un error al tratar de cargar los estados.';
+        alertify.error(mensaje);
+    });	
+}
+
+function cargaMunicipio(scope, http, id){
+    http({
+        method: 'get',
+        url: '/getEstados/'+id,
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+    }).success(function (response) {
+        scope.lmunicipio = response;
+    }).error(function (response) {
+        mensaje = 'Ocurrió un error al tratar de cargar los municipios del estado.';
+        alertify.error(mensaje);
+    });	
+}
 
 window.onload = function() {
 	var options = {
@@ -55,7 +92,9 @@ window.onload = function() {
 	})
 	document.querySelector('#btnCrop').addEventListener('click', function() {
 		var img = cropper.getDataURL();
-		document.querySelector('.cropped').innerHTML = '<img id="imagen_principal" ng-model="empresa.imagen_principal"  src="' + img + '">';
+		//document.querySelector('.cropped').innerHTML = '<img id="imagen_principal" ng-model="empresa.imagen_principal"  src="' + img + '">';
+		document.getElementById('imagen_principal').setAttribute( 'src', img);
+		imagen = img;
 		$('#modalImagen').modal('hide');
 	})
 	document.querySelector('#btnZoomIn').addEventListener('click', function() {

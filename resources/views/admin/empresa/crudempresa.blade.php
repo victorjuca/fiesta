@@ -43,10 +43,8 @@
                     <div class="col-md-4">
                     </div>
                     <div class="col-md-4 text-center">
+                    <img id="imagen_principal" file-model="imagen_principal"  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==">
 
-                        <div class="cropped">
-
-                        </div>
                     </div>
                 </div>
 
@@ -71,9 +69,8 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="estado">Estado</label>
                     <div class="col-md-4">
-                        <select id="estado" name="estado" class="form-control">
-                            <option value="1">Guanajuato</option>
-                            <option value="2">Queretaro</option>
+                        <select id="estado" name="estado" class="form-control" ng-change="cargaMunicipio(estado.id)" ng-model="estado" ng-options="estado as estado.nombre for estado in lestado" >
+<option value="">------------</option>
                         </select>
                     </div>
                 </div>
@@ -82,7 +79,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="municipio">Municipio</label>
                     <div class="col-md-4">
-                        <select id="municipio" name="municipio" class="form-control">
+                        <select id="municipio" name="municipio" class="form-control"  ng-model="municipio" ng-options="municipio as municipio.nombre for municipio in lmunicipio" >
                             <option value="1">Dolores Hidalgo</option>
                             <option value="2">San Diego de la Union</option>
                         </select>
