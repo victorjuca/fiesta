@@ -36,9 +36,7 @@ app.controller('empresaAdmonController', ['$scope', '$http', function($scope, $h
 	};
 
     $scope.guardaEmpresa = function () {
-
-        console.log(imagen);
-
+        console.log($scope.empresa);
     };
 
 }]);
@@ -104,3 +102,95 @@ window.onload = function() {
 		cropper.zoomOut();
 	})
 };
+
+
+function validaNombre(valor){
+	var estado = true;
+	if (valor == null || valor.length == 0) {
+        mensaje = "El Nombre no debe estar vacio.";
+        estado = false;
+	}
+	if (valor.length < 6) {
+		mensaje = 'El campo Nombre debe de tener por lo menos 5 caracteres.';
+		estado = false;
+	}
+	if (valor.length > 40) {
+		mensaje 'El campo Nombre no debe de tener más de 40 caracteres.';
+		estado = false;
+	}
+
+	if(!estado){
+		alertify.error(mensaje);
+	}
+	return estado;
+}
+
+function validaDescripcion(valor){
+	var estado = true;
+	var campo = "Descripción";
+	if (valor == null || valor.length == 0) {
+        mensaje = "El "+campo+" no debe estar vacio.";
+        estado = false;
+	}
+	if (valor.length < 20) {
+		mensaje = 'El campo '+campo+' debe de tener por lo menos 20 caracteres.';
+		estado = false;
+	}
+	if (valor.length > 400) {
+		mensaje 'El campo '+campo+' no debe de tener más de 400 caracteres.';
+		estado = false;
+	}
+
+	if(!estado){
+		alertify.error(mensaje);
+	}
+	return estado;
+}
+function validaMunicipio(valor){
+
+	var estado = true;
+	var campo = "Municipio";
+
+	if(valor === 0){
+        mensaje = "Debes seleccionar un Municipio.";
+        estado = false;		
+	}
+
+	if(!estado){
+		alertify.error(mensaje);
+	}	
+
+	return estado;
+}
+
+function validaDescripcion(valor){
+	var estado = true;
+	var campo = "Teléfono";
+	if (valor == null || valor.length == 0) {
+        mensaje = "El "+campo+" no debe estar vacio.";
+        estado = false;
+	}
+
+	if (!(/^\d{10}$/.test(valor))) {
+		mensaje =  'El campo Tel. o Celular es incorrecto.';
+	}
+
+	if(!estado){
+		alertify.error(mensaje);
+	}
+	return estado;
+}
+function validaImagen(valor){
+
+	var estado = true;
+
+	if (valor == null || valor.length == 0) {
+        mensaje = "Debe seleccionar una imagen.";
+        estado = false;
+	}
+
+	if(!estado){
+		alertify.error(mensaje);
+	}
+	return estado;
+}
